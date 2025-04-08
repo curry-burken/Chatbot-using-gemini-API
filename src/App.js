@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import ChatbotIcon from "./Components/ChatbotIcon";
+import ChatForm from "./Components/ChatForm";
+import ChatMessage from "./Components/ChatMessage";
 
 function App() {
+  const [chatHistory,setChatHistory] = useState([]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <div className="chatbot-popup">
+        <div className="chat-header">
+          <div className="header-info">
+            <ChatbotIcon/>
+            <h2 className="logo-text">Chatbot</h2>
+          </div>
+          <button class="material-symbols-outlined">keyboard_arrow_down</button>
+        </div>
+        <div className="chat-body">
+          <div className="message bot-message">
+            <ChatbotIcon/>
+            <p className="message-text">Hey there, How can I help you today?</p>
+          </div>
+          {chatHistory.map((chat,index)=>(
+            <ChatMessage key={index} chat={chat}/>
+          ))}
+          
+        </div>
+        <div className="chat-footer">
+          <ChatForm setChatHistory={setChatHistory}/>
+        </div>
+      </div>
     </div>
   );
 }
