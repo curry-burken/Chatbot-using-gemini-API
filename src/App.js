@@ -1,15 +1,18 @@
-import { useState, useRef, useEffect } from "react";
-import ChatbotIcon from "./Components/ChatbotIcon";
-import ChatForm from "./Components/ChatForm";
-import ChatMessage from "./Components/ChatMessage";
+import { useState, useRef, useEffect, createContext } from "react";
+import ChatInput from "./Components/ChatInput/ChatInput";
 import { companyInfo } from "./Components/CompanyInfo";
+import ChatBody from "./Components/ChatBody/ChatBody";
+import ChatHeader from "./Components/ChatHeader/ChatHeader";
+export const chatContext = createContext();
 
 function App() {
+
   const [chatHistory,setChatHistory] = useState([{
     hideInChat: true,
     role:"model",
     text: companyInfo,
   },]);
+
   const [showChatBot,setShowChatbot] = useState(false);
   const chatBodyRef = useRef();
 
@@ -41,7 +44,8 @@ function App() {
       console.log("Bot response:", data);
       const apiResponseText = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g,"$1").trim();
       updateHistory(apiResponseText);
-    } catch (error) {
+    } 
+    catch (error){
       updateHistory(error.message, true);
     }
   };
@@ -49,7 +53,15 @@ function App() {
   useEffect(()=>{
     chatBodyRef.current.scrollTo({top:chatBodyRef.current.scrollHeight, behavior:"smooth"})
   },[chatHistory]);
-  
+
+  const contextValue = {
+    chatHistory,
+    setChatHistory,
+    generateBotResponse,
+    chatBodyRef,
+    setShowChatbot,
+  };
+
   return (
     <div className={`container ${showChatBot?"show-chatbot":""}`}>
       <button onClick={()=> setShowChatbot(prev => !prev)} id="chatbot-toggler">
@@ -57,27 +69,11 @@ function App() {
         <span className="material-symbols-outlined">close</span>
       </button>
       <div className="chatbot-popup">
-        <div className="chat-header">
-          <div className="header-info">
-            <ChatbotIcon/>
-            <h2 className="logo-text">Chatbot</h2>
-          </div>
-          <button onClick={()=> setShowChatbot(prev => !prev)} className="material-symbols-outlined">keyboard_arrow_down</button>
-        </div>
-
-        <div ref={chatBodyRef} className="chat-body">
-          <div className="message bot-message">
-            <ChatbotIcon/>
-            <p className="message-text">Hey there, How can I help you today?</p>
-          </div>
-          {chatHistory.map((chat,index)=>(
-            <ChatMessage key={index} chat={chat}/>
-          ))}
-          
-        </div>
-        <div className="chat-footer">
-          <ChatForm chatHistory={chatHistory} setChatHistory={setChatHistory} generateBotResponse={generateBotResponse}/>
-        </div>
+        <chatContext.Provider value={contextValue}>
+          <ChatHeader/>
+          <ChatBody/>
+          <ChatInput/>
+        </chatContext.Provider>
       </div>
     </div>
   );

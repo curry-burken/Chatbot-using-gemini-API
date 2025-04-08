@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 function ChatbotIcon() {
   return (
@@ -7,4 +7,4 @@ function ChatbotIcon() {
   )
 }
 
-export default ChatbotIcon
+export default ChatbotIcon;
