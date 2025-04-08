@@ -82,6 +82,7 @@ body{
   overflow-y: auto;
   padding: 25px 22px;
   margin-bottom: 82px;
+  scrollbar-width: thin;
 }
 
 .chat-body .message{
