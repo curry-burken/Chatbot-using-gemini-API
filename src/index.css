@@ -9,20 +9,65 @@
 
 body{
   width:100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
   background: linear-gradient(#6e94ec,#cdffd3);
 }
 
+#chatbot-toggler{
+  position: fixed;
+  bottom: 30px;
+  right: 35px;
+  border:none;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  cursor: pointer;
+  border-radius: 50%;
+  background: #6D4FC2;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+#chatbot-toggler span{
+  position: absolute;
+  color: #fff;
+
+}
+
+.conatiner .show-chatbot #chatbot-toggler{
+  transform: rotate(90deg);
+}
+
+#chatbot-toggler span:last-child,
+.conatiner .show-chatbot #chatbot-toggler span:first-child{
+  opacity: 0;
+}
+
+.conatiner .show-chatbot #chatbot-toggler span:last-child{
+  opacity: 1;
+}
+
 .chatbot-popup{
-  position: relative;
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+  bottom: 90px;
+  right: 35px;
   background: #fff;
   width:420px;
+  transform: scale(0.2);
   border-radius: 15px;
   overflow: hidden;
+  transform-origin: bottom right;
   box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1), 0 32px 64px -48px rgba(0, 0, 0, 0.5);
+  transition: all 0.1s ease;
+}
+
+.container.show-chatbot .chatbot-popup{
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
 }
 
 .chatbot-popup .chat-header {
@@ -91,6 +136,10 @@ body{
   gap: 11px;
 }
 
+.chat-body .message.error .message-text{
+  color:red;
+}
+
 .chat-body .bot-message svg{
   height: 35px;
   width: 35px;
@@ -136,11 +185,6 @@ body{
   padding: 15px 22px 20px;
 }
 
-/* .chat-footer>div{
-  border-radius: 13px 13px 13px 13px;
-  color: red;
-} */
-
 .chat-footer .chat-form{
   display: flex;
   align-items: center;
@@ -185,4 +229,32 @@ body{
 
 .chat-form .message-input:valid ~ button{
   display:block;
+}
+
+@media (max-width: 520px){
+  #chatbot-toggler{
+    right:20px;
+    bottom:20px;
+  }
+
+  .chatbot-popup{
+    right:0;
+    bottom:0;
+    height: 100%;
+    border-radius: 0;
+    width:100%;
+  }
+
+  .chatbot-popup .chat-header{
+    padding: 12px 15px;
+  }
+
+  .chat-body{
+    height: calc(90%-55px);
+    padding: 25px 15px;
+  }
+
+  .chat-footer{
+    padding: 10px 15px 15px;
+  }
 }
